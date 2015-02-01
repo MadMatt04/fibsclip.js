@@ -5,7 +5,8 @@ module.exports = function (config) {
 
         files: [
             'lib/fibsclip.js',
-            'spec/initSpec.js'
+            'spec/initSpec.js',
+            'spec/parseSpec.js'
         ],
 
         autoWatch: true,
