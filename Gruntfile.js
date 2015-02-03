@@ -28,6 +28,11 @@ module.exports = function (grunt) {
                 push: true,
                 pushTo: 'origin'
             }
+        },
+
+        jshint: {
+            dev: ['lib/**/*.js', 'spec/**/*.js'],
+            all: ['Gruntfile.js', 'lib/**/*.js', 'spec/**/*.js']
         }
     });
 
@@ -36,10 +41,11 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-bower-task');
     grunt.loadNpmTasks('grunt-karma');
     grunt.loadNpmTasks('grunt-bump');
+    grunt.loadNpmTasks('grunt-contrib-jshint');
 
 
     grunt.registerTask('default', ['dev']);
 
-    grunt.registerTask('dev', ['clean:test', 'karma']);
+    grunt.registerTask('dev', ['clean:test', 'jshint:dev', 'karma']);
 
 };

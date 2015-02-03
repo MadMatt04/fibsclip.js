@@ -6,6 +6,7 @@ module.exports = function (config) {
         files: [
             'lib/fibsclip.js',
             'spec/initSpec.js',
+            'spec/msgHierarchySpec.js',
             'spec/parseSpec.js'
         ],
 
