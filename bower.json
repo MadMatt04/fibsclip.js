@@ -1,0 +1,41 @@
+{
+  "name": "fibsclip",
+  "version": "0.1.0",
+  "description": "A javascript parser for the First Internet's Backgammon Server's client protocol",
+  "author": "Matija Kejžar <madmatt04@gmail.com>",
+  "main": "lib/fibsclip.js",
+  "ignore": [
+    ".jshintrc",
+    "**/*.txt",
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests",
+    ".idea"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/madmatt04/fibsclip.js"
+  },
+  "bugs": {
+    "url": "https://github.com/madmatt04/fibsclip.js/issues"
+  },
+  "keywords": [
+    "fibsclip",
+    "FIBS",
+    "CLIP",
+    "First",
+    "Internet",
+    "Backgammon",
+    "Server",
+    "backgammon"
+  ],
+  "analyze": true,
+  "license": "MIT",
+  "homepage": "https://github.com/MadMatt04/fibsclip.js",
+  "authors": [
+    "Matija Kejžar <madmatt04@gmail.com>"
+  ],
+  "private": true
+}
