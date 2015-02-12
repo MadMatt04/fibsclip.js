@@ -39,7 +39,6 @@ describe("fibsclip Parsing Specs", function () {
     it("Parse -1 - Login Prompt", function() {
         var line = "login: ";
         var msg = fibs.parse(line);
-        console.log("login msg", msg);
         expect(msg.length).toBe(1);
         var m = msg[0];
         expect(m.name).toBe("Login Prompt");
@@ -49,5 +48,46 @@ describe("fibsclip Parsing Specs", function () {
         expect(m.text).toBe("login: ");
         var t = m.tokenize();
         expect(t[0]).toBe("login:");
+    });
+
+    it("Parse 2 - CLIP Own Info", function () {
+
+        var line = "2 myself 1 1 0 0 0 0 1 1 2396 0 1 0 1 3457.85 0 0 0 0 0 Australia/Melbourne";
+        var msg = fibs.parse(line);
+        expect(msg.length).toBe(1);
+        var m = msg[0];
+        expect(m.name).toBe("CLIP Own Info");
+        expect(m.type).toBe("CLIP");
+        expect(m.id).toBe(2);
+        expect(m.trueClip).toBeTruthy();
+        expect(m.text).toBe(line);
+        expect(m.settings).toBeTruthy();
+        expect(m.settings.name).toBe("myself");
+        expect(m.settings.allowpip).toBe(true);
+        expect(m.settings.autoboard).toBe(true);
+        expect(m.settings.autodouble).toBe(false);
+        expect(m.settings.automove).toBe(false);
+        expect(m.settings.away).toBe(false);
+        expect(m.settings.bell).toBe(false);
+        expect(m.settings.crawford).toBe(true);
+        expect(m.settings.double).toBe(true);
+        expect(m.settings.experience).toBe(2396);
+        expect(m.settings.greedy).toBe(false);
+        expect(m.settings.moreboards).toBe(true);
+        expect(m.settings.moves).toBe(false);
+        expect(m.settings.notify).toBe(true);
+        expect(m.settings.rating).toBe(3457.85);
+        expect(m.settings.ratings).toBe(false);
+        expect(m.settings.ready).toBe(false);
+        expect(m.settings.redoubles).toBe(0);
+        expect(m.settings.report).toBe(false);
+        expect(m.settings.silent).toBe(false);
+        expect(m.settings.timezone).toBe("Australia/Melbourne");
+
+        m.settings.experience = 3000;
+        expect(m.settings.experience).toBe(3000);
+        m.settings.report = true;
+        expect(m.settings.report).toBe(true);
+
     });
 });
