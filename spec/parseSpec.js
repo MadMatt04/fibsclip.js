@@ -15,7 +15,18 @@ describe("fibsclip Parsing Specs", function () {
 
     it("Parse IAC", function () {
         var sequence = ar2uinta([255, 252, 1, 13, 10, 108, 111, 103, 105, 110, 58, 32]);
-        fibs.parse(sequence);
+        var options = {
+            buffer: "",
+            parseIac: true
+        };
+        var msg = fibs.parse(sequence, options);
+        console.log("MSG", msg, options);
+        expect(msg.length).toBe(3);
+        expect(msg[0].type).toBe("IAC");
+        expect(msg[1].type).toBe("NEWLINE");
+        expect(msg[2].type).toBe("CLIP");
+        expect(msg[2].id).toBe(-1);
+        expect(msg[2].text).toBe("login: ");
     });
 
     it("Parse 1 - CLIP Welcome", function() {
