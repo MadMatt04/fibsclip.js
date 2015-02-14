@@ -1,17 +1,13 @@
 describe("fibsclip Parsing Specs", function () {
 
     function ar2uinta(array) {
-        var uinta = new Uint8Array(array.length);
+        var uinta = new Uint16Array(array.length);
         array.forEach(function (e, index) {
             uinta[index] = e;
         });
 
         return uinta;
     }
-
-    afterEach(function () {
-        fibs.clearBuffer();
-    });
 
     it("Parse IAC", function () {
         var sequence = ar2uinta([255, 252, 1, 13, 10, 108, 111, 103, 105, 110, 58, 32]);
@@ -107,5 +103,22 @@ describe("fibsclip Parsing Specs", function () {
         m.settings.report = true;
         expect(m.settings.report).toBe(true);
 
+    });
+
+    it("Parse Mixed", function () {
+        var sequence = ar2uinta([255, 252, 1, 108, 111, 103, 105, 110, 255, 252, 1, 108, 111, 103, 105, 95]);
+        var options = {
+            buffer: "",
+            parseIac: true
+        };
+        var msg = fibs.parse(sequence, options);
+        console.log("MSG", msg, options);
+        expect(msg.length).toBe(3);
+        expect(msg[0].type).toBe("IAC");
+        expect(msg[1].type).toBe("CLIP");
+        expect(msg[1].id).toBe(fibs.CLIP_UNRECOGNIZED);
+        expect(msg[1].text).toBe("login");
+        expect(msg[2].type).toBe("IAC");
+        expect(options.buffer).toBe("logi_");
     });
 });
