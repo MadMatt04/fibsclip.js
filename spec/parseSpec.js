@@ -1,7 +1,7 @@
 describe("fibsclip Parsing Specs", function () {
 
     function ar2uinta(array) {
-        var uinta = new Uint16Array(array.length);
+        var uinta = new Uint8Array(array.length);
         array.forEach(function (e, index) {
             uinta[index] = e;
         });
