@@ -9,6 +9,10 @@ describe("fibsclip Parsing Specs", function () {
         return uinta;
     }
 
+    afterEach(function () {
+        fibs.clearBuffer();
+    });
+
     it("Parse IAC", function () {
         var sequence = ar2uinta([255, 252, 1, 13, 10, 108, 111, 103, 105, 110, 58, 32]);
         fibs.parse(sequence);
@@ -37,8 +41,11 @@ describe("fibsclip Parsing Specs", function () {
     });
 
     it("Parse -1 - Login Prompt", function() {
+        var options = {
+            buffer: false
+        };
         var line = "login: ";
-        var msg = fibs.parse(line);
+        var msg = fibs.parse(line, options);
         expect(msg.length).toBe(1);
         var m = msg[0];
         expect(m.name).toBe("Login Prompt");
@@ -52,15 +59,15 @@ describe("fibsclip Parsing Specs", function () {
 
     it("Parse 2 - CLIP Own Info", function () {
 
-        var line = "2 myself 1 1 0 0 0 0 1 1 2396 0 1 0 1 3457.85 0 0 0 0 0 Australia/Melbourne";
+        var line = "2 myself 1 1 0 0 0 0 1 1 2396 0 1 0 1 3457.85 0 0 0 0 0 Australia/Melbourne\r\n";
         var msg = fibs.parse(line);
-        expect(msg.length).toBe(1);
+        expect(msg.length).toBe(2);
         var m = msg[0];
         expect(m.name).toBe("CLIP Own Info");
         expect(m.type).toBe("CLIP");
         expect(m.id).toBe(2);
         expect(m.trueClip).toBeTruthy();
-        expect(m.text).toBe(line);
+        expect(m.text).toBe("2 myself 1 1 0 0 0 0 1 1 2396 0 1 0 1 3457.85 0 0 0 0 0 Australia/Melbourne");
         expect(m.settings).toBeTruthy();
         expect(m.settings.name).toBe("myself");
         expect(m.settings.allowpip).toBe(true);
