@@ -9,10 +9,31 @@ describe("fibsclip Parsing Specs", function () {
         return uinta;
     }
 
+    it("String to inta", function () {
+        var jb = "Johnny Bravo";
+        var int8a = fibs.str2int8a(jb);
+        var int16a = fibs.str2int16a(jb);
+        expect(int8a.length).toBe(12);
+        expect(int16a.length).toBe(12);
+        var s1 = fibs.int8a2str(int8a);
+        var s2 = fibs.int16a2str(int16a);
+        expect(s1).toBe(s2);
+
+        jb = "Matija Kejžar";
+        int8a = fibs.str2int8a(jb);
+        int16a = fibs.str2int16a(jb);
+        s1 = fibs.int8a2str(int8a);
+        s2 = fibs.int16a2str(int16a);
+        expect(int8a.length).toBe(13);
+        expect(int16a.length).toBe(13);
+        expect(s1).toBe("Matija Kej~ar");
+        expect(s2).toBe("Matija Kejžar");
+    });
+
     it("Parse IAC", function () {
         var sequence = ar2uinta([255, 252, 1, 13, 10, 108, 111, 103, 105, 110, 58, 32]);
         var options = {
-            buffer: "",
+            buffer: new Uint8Array(0),
             parseIac: true
         };
         var msg = fibs.parse(sequence, options);
@@ -106,9 +127,9 @@ describe("fibsclip Parsing Specs", function () {
     });
 
     it("Parse Mixed", function () {
-        var sequence = ar2uinta([255, 252, 1, 108, 111, 103, 105, 110, 255, 252, 1, 108, 111, 103, 105, 95]);
+        var sequence = ar2uinta([255, 252, 1, 108, 111, 103, 105, 110, 255, 252, 1, 108, 111, 103, 105]);
         var options = {
-            buffer: "",
+            buffer: new Uint8Array(0),
             parseIac: true
         };
         var msg = fibs.parse(sequence, options);
@@ -119,6 +140,20 @@ describe("fibsclip Parsing Specs", function () {
         expect(msg[1].id).toBe(fibs.CLIP_UNRECOGNIZED);
         expect(msg[1].text).toBe("login");
         expect(msg[2].type).toBe("IAC");
-        expect(options.buffer).toBe("logi_");
+        expect(fibs.int8a2str(options.buffer)).toBe("logi");
+
+        sequence = ar2uinta([100, 100, 101, 119, 13, 10]);
+        msg = fibs.parse(sequence, options);
+        expect(msg.length).toBe(2);
+        expect(msg[0].type).toBe("CLIP");
+        expect(msg[0].id).toBe(fibs.CLIP_UNRECOGNIZED);
+        expect(msg[0].text).toBe("logiddew");
+
+        options.buffer = ar2uinta([108, 111, 103, 105, 110]);
+        msg = fibs.parse(ar2uinta([255, 252, 1]), options);
+        expect(msg.length).toBe(2);
+        expect(msg[0].type).toBe("CLIP");
+        expect(msg[0].id).toBe(fibs.CLIP_UNRECOGNIZED);
+        expect(msg[1].type).toBe("IAC");
     });
 });
