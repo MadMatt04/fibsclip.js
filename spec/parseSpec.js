@@ -156,4 +156,20 @@ describe("fibsclip Parsing Specs", function () {
         expect(msg[0].id).toBe(fibs.CLIP_UNRECOGNIZED);
         expect(msg[1].type).toBe("IAC");
     });
+
+    it("Parse multiline MOTD", function () {
+        var motd = "3\r\nThis is line 1.\r\nLine 2.\r\nline3\r\nFourth line.\r\n4\r\n";
+        var options = {
+            parseIac: false,
+            buffer: new Uint8Array(0)
+        };
+        var msg = fibs.parse(motd, options);
+        console.log("MX", msg);
+        expect(msg.length).toBe(3);
+        expect(msg[0].id).toBe(3);
+        expect(msg[0].text).toBe("This is line 1.\r\nLine 2.\r\nline3\r\nFourth line.\r\n");
+        expect(msg[1].id).toBe(4);
+        expect(msg[1].text).toBe("");
+        expect(msg[2].type).toBe("NEWLINE");
+    });
 });
