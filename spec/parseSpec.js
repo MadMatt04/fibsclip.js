@@ -36,8 +36,7 @@ describe("fibsclip Parsing Specs", function () {
             buffer: new Uint8Array(0),
             parseIac: true
         };
-        var msg = fibs.parse(sequence, options);
-        console.log("MSG", msg, options);
+        var msg = fibs.parse(sequence, new Uint8Array(0), options);
         expect(msg.length).toBe(3);
         expect(msg[0].type).toBe("IAC");
         expect(msg[1].type).toBe("NEWLINE");
@@ -69,11 +68,8 @@ describe("fibsclip Parsing Specs", function () {
     });
 
     it("Parse -1 - Login Prompt", function() {
-        var options = {
-            buffer: false
-        };
         var line = "login: ";
-        var msg = fibs.parse(line, options);
+        var msg = fibs.parse(line);
         expect(msg.length).toBe(1);
         var m = msg[0];
         expect(m.name).toBe("Login Prompt");
@@ -129,31 +125,33 @@ describe("fibsclip Parsing Specs", function () {
     it("Parse Mixed", function () {
         var sequence = ar2uinta([255, 252, 1, 108, 111, 103, 105, 110, 255, 252, 1, 108, 111, 103, 105]);
         var options = {
-            buffer: new Uint8Array(0),
             parseIac: true
         };
-        var msg = fibs.parse(sequence, options);
+        var buffer = new Uint8Array(0);
+        var msg = fibs.parse(sequence, buffer, options);
         console.log("MSG", msg, options);
-        expect(msg.length).toBe(3);
+        expect(msg.length).toBe(4);
         expect(msg[0].type).toBe("IAC");
         expect(msg[1].type).toBe("CLIP");
         expect(msg[1].id).toBe(fibs.CLIP_UNRECOGNIZED);
         expect(msg[1].text).toBe("login");
         expect(msg[2].type).toBe("IAC");
-        expect(fibs.int8a2str(options.buffer)).toBe("logi");
+        expect(msg[3].type).toBe("BUFFER");
+        expect(fibs.int8a2str(msg[3].buffer)).toBe("logi");
 
         sequence = ar2uinta([100, 100, 101, 119, 13, 10]);
-        msg = fibs.parse(sequence, options);
+        msg = fibs.parse(sequence, msg[3].buffer, options);
         expect(msg.length).toBe(2);
         expect(msg[0].type).toBe("CLIP");
         expect(msg[0].id).toBe(fibs.CLIP_UNRECOGNIZED);
         expect(msg[0].text).toBe("logiddew");
 
-        options.buffer = ar2uinta([108, 111, 103, 105, 110]);
-        msg = fibs.parse(ar2uinta([255, 252, 1]), options);
+        buffer = ar2uinta([108, 111, 103, 105, 110]);
+        msg = fibs.parse(ar2uinta([255, 252, 1]), buffer, options);
         expect(msg.length).toBe(2);
         expect(msg[0].type).toBe("CLIP");
         expect(msg[0].id).toBe(fibs.CLIP_UNRECOGNIZED);
+        expect(msg[0].text).toBe("login");
         expect(msg[1].type).toBe("IAC");
     });
 });
