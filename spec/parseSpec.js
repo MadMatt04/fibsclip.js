@@ -162,12 +162,18 @@ describe("fibsclip Parsing Specs", function () {
             buffer: new Uint8Array(0)
         };
         var msg = fibs.parse(motd, options);
-        console.log("MX", msg);
         expect(msg.length).toBe(3);
         expect(msg[0].id).toBe(3);
-        expect(msg[0].text).toBe("This is line 1.\r\nLine 2.\r\nline3\r\nFourth line.\r\n");
+        expect(msg[0].text).toBe("3\r\nThis is line 1.\r\nLine 2.\r\nline3\r\nFourth line.\r\n");
         expect(msg[1].id).toBe(4);
-        expect(msg[1].text).toBe("");
+        expect(msg[1].text).toBe("4");
         expect(msg[2].type).toBe("NEWLINE");
+        var lines = msg[0].lines();
+        expect(lines.length).toBe(5);
+        expect(lines[0]).toBe("3");
+        expect(lines[1]).toBe("This is line 1.");
+        expect(lines[2]).toBe("Line 2.");
+        expect(lines[3]).toBe("line3");
+        expect(lines[4]).toBe("Fourth line.");
     });
 });
