@@ -158,8 +158,7 @@ describe("fibsclip Parsing Specs", function () {
     it("Parse multiline MOTD", function () {
         var motd = "3\r\nThis is line 1.\r\nLine 2.\r\nline3\r\nFourth line.\r\n4\r\n";
         var options = {
-            parseIac: false,
-            buffer: new Uint8Array(0)
+            parseIac: false
         };
         var msg = fibs.parse(motd, options);
         expect(msg.length).toBe(3);
