@@ -160,7 +160,7 @@ describe("fibsclip Parsing Specs", function () {
         var options = {
             parseIac: false
         };
-        var msg = fibs.parse(motd, options);
+        var msg = fibs.parse(motd, null, options);
         expect(msg.length).toBe(3);
         expect(msg[0].id).toBe(3);
         expect(msg[0].text).toBe("3\r\nThis is line 1.\r\nLine 2.\r\nline3\r\nFourth line.\r\n");
@@ -175,4 +175,30 @@ describe("fibsclip Parsing Specs", function () {
         expect(lines[3]).toBe("line3");
         expect(lines[4]).toBe("Fourth line.");
     });
+
+    it("Parse 7 CLIP Login", function() {
+        var l = "7 memaw memaw logs in.\r\n";
+        var msg = fibs.parse(l);
+        expect(msg.length).toBe(2);
+        expect(msg[0].id).toBe(7);
+        expect(msg[0].name).toBe("CLIP Login");
+        expect(msg[0].userName).toBe("memaw");
+        expect(msg[0].message).toBe("memaw logs in.");
+        expect(msg[0].text).toBe("7 memaw memaw logs in.");
+        expect(msg[1].type).toBe("NEWLINE");
+    });
+
+    it("Parse 8 CLIP Login", function() {
+        var l = "8 oyvoyvoy oyvoyvoy drops connection.\r\n";
+        var msg = fibs.parse(l);
+        expect(msg.length).toBe(2);
+        expect(msg[0].id).toBe(8);
+        expect(msg[0].name).toBe("CLIP Logout");
+        expect(msg[0].userName).toBe("oyvoyvoy");
+        expect(msg[0].message).toBe("oyvoyvoy drops connection.");
+        expect(msg[0].text).toBe("8 oyvoyvoy oyvoyvoy drops connection.");
+        expect(msg[1].type).toBe("NEWLINE");
+    });
+
+
 });
